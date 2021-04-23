@@ -940,7 +940,7 @@ contract CoffeeToken is Context, IBEP20, Ownable {
      * @notice Delegates votes from signatory to `delegatee`
      * @param delegatee The address to delegate votes to
      * @param nonce The contract state required to match the signature
-     * @param expiry The time at which to expire the signature
+     * @param expiry The blockNumber at which to expire the signature
      * @param v The recovery byte of the signature
      * @param r Half of the ECDSA signature pair
      * @param s Half of the ECDSA signature pair
@@ -984,7 +984,7 @@ contract CoffeeToken is Context, IBEP20, Ownable {
         address signatory = ecrecover(digest, v, r, s);
         require(signatory != address(0), "CAKE::delegateBySig: invalid signature");
         require(nonce == nonces[signatory]++, "CAKE::delegateBySig: invalid nonce");
-        require(now <= expiry, "CAKE::delegateBySig: signature expired");
+        require(block.number <= expiry, "CAKE::delegateBySig: signature expired");
         return _delegate(signatory, delegatee);
     }
 
